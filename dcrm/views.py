@@ -5,8 +5,11 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.contrib import messages # informs the user if they have successfully logged in or logged out
 from . forms import SignUpForm # Allow to create a view for the form created and import it from forms.py
+from . models import Record # Create view we import the model objects
 
 def home(request):
+    #grab all the records in Record model
+    records = Record.objects.all()
     #Check if logging in
     if request.method == 'POST':
         username = request.POST["username"]
@@ -22,7 +25,7 @@ def home(request):
             messages.success(request,"Try Again!")
             return redirect('home')
     else:
-        return render(request,'home.html',{})
+        return render(request,'home.html',{'records':records}) # since the user is already logged in the context dict shows the records
 
 def logout_user(request):
     """ Handles the logging out of users"""
